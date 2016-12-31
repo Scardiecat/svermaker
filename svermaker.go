@@ -3,13 +3,23 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/blang/semver"
 	"github.com/urfave/cli"
 )
 
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	//log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stderr instead of stdout, could also be a file.
+	log.SetOutput(os.Stderr)
+
+	// Only log the debug severity or above.
+	log.SetLevel(log.DebugLevel)
+}
 func main() {
 	app := cli.NewApp()
 	app.Name = "svermaker"
@@ -56,6 +66,37 @@ func main() {
 					log.Fatal(err)
 				}
 				return nil
+			},
+		},
+		{
+			Name:    "next",
+			Aliases: []string{"n"},
+			Usage:   "next semvar",
+			Subcommands: []cli.Command{
+				{
+					Name:  "major",
+					Usage: "next is a major release (breaking api)",
+					Action: func(c *cli.Context) error {
+						log.Info("new major release: ", c.Args().First())
+						return nil
+					},
+				},
+				{
+					Name:  "minor",
+					Usage: "next is a minor release (non api break adding feature)",
+					Action: func(c *cli.Context) error {
+						fmt.Println("new task template: ", c.Args().First())
+						return nil
+					},
+				},
+				{
+					Name:  "patch",
+					Usage: "next is a patch release (non api break bug fix)",
+					Action: func(c *cli.Context) error {
+						fmt.Println("new task template: ", c.Args().First())
+						return nil
+					},
+				},
 			},
 		},
 	}
