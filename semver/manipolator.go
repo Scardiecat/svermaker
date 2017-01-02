@@ -1,7 +1,9 @@
 package semver
 
-import "github.com/Scardiecat/svermaker"
-import blangs "github.com/blang/semver"
+import (
+	"github.com/Scardiecat/svermaker"
+	blangs "github.com/blang/semver"
+)
 
 // Ensure Manipulator implements svermaker.Manipulator.
 var _ svermaker.Manipulator = &Manipulator{}
@@ -11,6 +13,14 @@ type Manipulator struct {
 }
 
 func (m *Manipulator) Bump(semver svermaker.Version, component svermaker.SemverComponent) (svermaker.Version, error) {
+	switch component {
+	case svermaker.PATCH:
+		semver.Patch += 1
+	case svermaker.MINOR:
+		semver.Minor += 1
+	case svermaker.MAJOR:
+		semver.Major += 1
+	}
 	return semver, nil
 }
 func (m *Manipulator) SetPrerelease(semver svermaker.Version, annotation string) (svermaker.Version, error) {
