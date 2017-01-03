@@ -30,3 +30,4 @@ _testmain.go
 # External packages folder
 vendor/
 CHANGELOG.html
+README.html
