@@ -1,5 +1,7 @@
 package svermaker
 
+import "strconv"
+
 // Version represents a semver compatible version
 type Version struct {
 	Major uint64
@@ -7,6 +9,46 @@ type Version struct {
 	Patch uint64
 	Pre   []PRVersion
 	Build []string //No Precendence
+}
+
+// Version to string
+func (v Version) String() string {
+	b := make([]byte, 0, 5)
+	b = strconv.AppendUint(b, v.Major, 10)
+	b = append(b, '.')
+	b = strconv.AppendUint(b, v.Minor, 10)
+	b = append(b, '.')
+	b = strconv.AppendUint(b, v.Patch, 10)
+
+	if len(v.Pre) > 0 {
+		b = append(b, '-')
+		b = append(b, v.Pre[0].String()...)
+
+		for _, pre := range v.Pre[1:] {
+			b = append(b, '.')
+			b = append(b, pre.String()...)
+		}
+	}
+
+	if len(v.Build) > 0 {
+		b = append(b, '+')
+		b = append(b, v.Build[0]...)
+
+		for _, build := range v.Build[1:] {
+			b = append(b, '.')
+			b = append(b, build...)
+		}
+	}
+
+	return string(b)
+}
+
+// PreRelease version to string
+func (v PRVersion) String() string {
+	if v.IsNum {
+		return strconv.FormatUint(v.VersionNum, 10)
+	}
+	return v.VersionStr
 }
 
 // PRVersion represents a PreRelease Version
@@ -29,17 +71,13 @@ type ProjectVersion struct {
 	next    Version
 }
 
-// Serializer allows reading and writing of a ProjectVersion
-type Serializer interface {
-	Write(projVersion ProjectVersion) error
-	Read() (*Version, error)
+// creates an connection to the services
+type Client interface {
+	ProjectVersionService() ProjectVersionService
 }
 
-type SemverService interface {
-	Semver(key string) (Version, error)
-	CreateSemver(s *Version, key string) error
-	DeleteSemver(key string) error
-	WriteSemver(s Version, key string) error
+type ProjectVersionService interface {
+	Init() (*ProjectVersion, error)
 }
 
 type Manipulator interface {
