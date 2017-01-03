@@ -39,6 +39,7 @@ type SemverService interface {
 
 type Manipulator interface {
 	Bump(semver Version, component SemverComponent) (Version, error)
-	SetPrerelease(semver Version, annotation string) (Version, error)
-	SetMetadata(semver Version, metadata string) (Version, error)
+	SetPrerelease(semver Version, prerelease []PRVersion) (Version, error)
+	SetMetadata(semver Version, metadata []string) (Version, error)
+	MakePrerelease(s ...string) ([]PRVersion, error)
 }

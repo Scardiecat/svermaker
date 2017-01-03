@@ -23,18 +23,42 @@ func (m *Manipulator) Bump(semver svermaker.Version, component svermaker.SemverC
 	}
 	return semver, nil
 }
-func (m *Manipulator) SetPrerelease(semver svermaker.Version, annotation string) (svermaker.Version, error) {
+func (m *Manipulator) SetPrerelease(semver svermaker.Version, prerelease []svermaker.PRVersion) (svermaker.Version, error) {
+	semver.Pre = prerelease
 	return semver, nil
 }
-func (m *Manipulator) SetMetadata(semver svermaker.Version, metadata string) (svermaker.Version, error) {
+func (m *Manipulator) SetMetadata(semver svermaker.Version, metadata []string) (svermaker.Version, error) {
+	semver.Build = metadata
 	return semver, nil
+}
+func (m *Manipulator) MakePrerelease(s ...string) ([]svermaker.PRVersion, error) {
+	bpres := make([]blangs.PRVersion, 0)
+	for _, p := range s {
+		v, err := blangs.NewPRVersion(p)
+		if err == nil {
+			bpres = append(bpres, v)
+		}
+	}
+	return setPreFrom(bpres), nil
 }
 
-func setFrom(bv blangs.Version) svermaker.Version {
-	pre := make([]svermaker.PRVersion, 1)
-	for _, bpre := range bv.Pre {
+func setPreFrom(bv []blangs.PRVersion) []svermaker.PRVersion {
+	pre := make([]svermaker.PRVersion, 0)
+	for _, bpre := range bv {
 		pre = append(pre, svermaker.PRVersion(bpre))
 	}
+	return pre
+}
+
+func exportPreTo(v []svermaker.PRVersion) []blangs.PRVersion {
+	bpre := make([]blangs.PRVersion, 0)
+	for _, pre := range v {
+		bpre = append(bpre, blangs.PRVersion(pre))
+	}
+	return bpre
+}
+func setFrom(bv blangs.Version) svermaker.Version {
+	pre := setPreFrom(bv.Pre)
 
 	build := make([]string, 1)
 	for _, bbuild := range bv.Build {
@@ -44,10 +68,7 @@ func setFrom(bv blangs.Version) svermaker.Version {
 }
 
 func exportTo(v svermaker.Version) blangs.Version {
-	bpre := make([]blangs.PRVersion, 0)
-	for _, pre := range v.Pre {
-		bpre = append(bpre, blangs.PRVersion(pre))
-	}
+	bpre := exportPreTo(v.Pre)
 
 	bbuild := make([]string, 0)
 	for _, build := range v.Build {
