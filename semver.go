@@ -24,10 +24,15 @@ const (
 	MAJOR
 )
 
-// Serializer allows reading and writing of a Semver
+type ProjectVersion struct {
+	current Version
+	next    Version
+}
+
+// Serializer allows reading and writing of a ProjectVersion
 type Serializer interface {
-	Write(semver Version) error
-	Read() (Version, error)
+	Write(projVersion ProjectVersion) error
+	Read() (*Version, error)
 }
 
 type SemverService interface {
