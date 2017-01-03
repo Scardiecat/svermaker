@@ -2,4 +2,4 @@ deployment:
   master:
     branch: master
     commands:
-      - mv svermaker ${CIRCLE_ARTIFACTS}/
+      - mv /home/ubuntu/.go_workspace/bin/svermaker ${CIRCLE_ARTIFACTS}/
