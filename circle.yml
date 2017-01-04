@@ -1,0 +1,6 @@
+deployment: 
+  master: 
+    branch: master 
+    commands: 
+      - go install ./...
+      - mv svermaker ${CIRCLE_ARTIFACTS}/
