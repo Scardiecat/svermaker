@@ -6,8 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - manipulator: allows to bump versions and set prerelease and build metadata
+- projectversion service which allows init of a repository
+- cli : init call
 ### Changed
-- cli is not located in the cmd folder
+- cli is now located in the cmd folder
+- version file is now called version.yml
 
 ## [0.1.0] 2016-12-30
 ### Added

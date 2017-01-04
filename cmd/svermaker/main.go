@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Scardiecat/svermaker/yaml"
 	log "github.com/Sirupsen/logrus"
 	"github.com/blang/semver"
 	"github.com/urfave/cli"
@@ -97,6 +98,21 @@ func main() {
 						return nil
 					},
 				},
+			},
+		},
+		{
+			Name:    "init",
+			Aliases: []string{"i"},
+			Usage:   "init a version",
+			Action: func(c *cli.Context) error {
+				var serializer = yaml.NewSerializer(c.Args().First())
+				var pvs = yaml.ProjectVersionService{Serializer: serializer}
+				if v, err := pvs.Init(); err == nil {
+					log.Infof("Version is %s", v.Current.String())
+					return nil
+				} else {
+					return err
+				}
 			},
 		},
 	}

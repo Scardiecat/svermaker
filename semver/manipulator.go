@@ -67,7 +67,7 @@ func exportPreTo(v []svermaker.PRVersion) []blangs.PRVersion {
 func setFrom(bv blangs.Version) *svermaker.Version {
 	pre := setPreFrom(bv.Pre)
 
-	build := make([]string, 1)
+	build := make([]string, 0)
 	for _, bbuild := range bv.Build {
 		build = append(build, bbuild)
 	}
