@@ -42,6 +42,13 @@ func (m *Manipulator) MakePrerelease(s ...string) ([]svermaker.PRVersion, error)
 	return setPreFrom(bpres), nil
 }
 
+func (m *Manipulator) Create(s string) (*svermaker.Version, error) {
+	if bv, err := blangs.Make(s); err == nil {
+		return setFrom(bv), nil
+	} else {
+		return nil, err
+	}
+}
 func setPreFrom(bv []blangs.PRVersion) []svermaker.PRVersion {
 	pre := make([]svermaker.PRVersion, 0)
 	for _, bpre := range bv {
@@ -57,22 +64,22 @@ func exportPreTo(v []svermaker.PRVersion) []blangs.PRVersion {
 	}
 	return bpre
 }
-func setFrom(bv blangs.Version) svermaker.Version {
+func setFrom(bv blangs.Version) *svermaker.Version {
 	pre := setPreFrom(bv.Pre)
 
 	build := make([]string, 1)
 	for _, bbuild := range bv.Build {
 		build = append(build, bbuild)
 	}
-	return svermaker.Version{bv.Major, bv.Minor, bv.Patch, pre, build}
+	return &svermaker.Version{bv.Major, bv.Minor, bv.Patch, pre, build}
 }
 
-func exportTo(v svermaker.Version) blangs.Version {
+func exportTo(v svermaker.Version) *blangs.Version {
 	bpre := exportPreTo(v.Pre)
 
 	bbuild := make([]string, 0)
 	for _, build := range v.Build {
 		bbuild = append(bbuild, build)
 	}
-	return blangs.Version{v.Major, v.Minor, v.Patch, bpre, bbuild}
+	return &blangs.Version{v.Major, v.Minor, v.Patch, bpre, bbuild}
 }

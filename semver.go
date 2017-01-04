@@ -67,13 +67,16 @@ const (
 )
 
 type ProjectVersion struct {
-	current Version
-	next    Version
+	Current Version
+	Next    Version
 }
 
-// creates an connection to the services
-type Client interface {
-	ProjectVersionService() ProjectVersionService
+var DefaultProjectVersion = ProjectVersion{Current: Version{0, 1, 0, nil, nil}, Next: Version{0, 1, 0, nil, nil}}
+
+type Serializer interface {
+	Serialize(p ProjectVersion) error
+	Deserialize() (*ProjectVersion, error)
+	Exists() bool
 }
 
 type ProjectVersionService interface {
@@ -85,4 +88,5 @@ type Manipulator interface {
 	SetPrerelease(semver Version, prerelease []PRVersion) (Version, error)
 	SetMetadata(semver Version, metadata []string) (Version, error)
 	MakePrerelease(s ...string) ([]PRVersion, error)
+	Create(s string) (*Version, error)
 }
