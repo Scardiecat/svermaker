@@ -1,13 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 
+	"github.com/Scardiecat/svermaker/semver"
 	"github.com/Scardiecat/svermaker/yaml"
 	log "github.com/Sirupsen/logrus"
-	"github.com/blang/semver"
 	"github.com/urfave/cli"
 )
 
@@ -27,46 +26,18 @@ func main() {
 	app.Usage = "Help with semver versioning for git projects"
 	app.Commands = []cli.Command{
 		{
-			Name:    "test",
-			Aliases: []string{"t"},
-			Usage:   "just some sample code",
-			Action: func(c *cli.Context) error {
-				v, _ := semver.Make("0.0.1-alpha.preview+123.github")
-				fmt.Printf("Major: %d\n", v.Major)
-				fmt.Printf("Minor: %d\n", v.Minor)
-				fmt.Printf("Patch: %d\n", v.Patch)
-				fmt.Printf("Pre: %s\n", v.Pre)
-				fmt.Printf("Build: %s\n", v.Build)
-
-				return nil
-			},
-		},
-		{
 			Name:    "current",
 			Aliases: []string{"c"},
 			Usage:   "show the current semver",
 			Action: func(c *cli.Context) error {
-				// open a file
-				if file, err := os.Open("version.txt"); err == nil {
-
-					// make sure it gets closed
-					defer file.Close()
-
-					// create a new scanner and read the file line by line
-					scanner := bufio.NewScanner(file)
-					for scanner.Scan() {
-						log.Println(scanner.Text())
-					}
-
-					// check for errors
-					if err = scanner.Err(); err != nil {
-						log.Fatal(err)
-					}
-
+				var serializer = yaml.NewSerializer(c.Args().First())
+				var pvs = semver.ProjectVersionService{Serializer: serializer}
+				if v, err := pvs.GetCurrent(); err == nil {
+					log.Infof("Version is %s", v.String())
+					return nil
 				} else {
-					log.Fatal(err)
+					return err
 				}
-				return nil
 			},
 		},
 		{
@@ -106,7 +77,7 @@ func main() {
 			Usage:   "init a version",
 			Action: func(c *cli.Context) error {
 				var serializer = yaml.NewSerializer(c.Args().First())
-				var pvs = yaml.ProjectVersionService{Serializer: serializer}
+				var pvs = semver.ProjectVersionService{Serializer: serializer}
 				if v, err := pvs.Init(); err == nil {
 					log.Infof("Version is %s", v.Current.String())
 					return nil

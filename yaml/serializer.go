@@ -16,7 +16,7 @@ type Serializer struct {
 	Filename string
 
 	// Services
-	projectVersionService ProjectVersionService
+	projectVersionService semver.ProjectVersionService
 }
 
 type projectVersion struct {

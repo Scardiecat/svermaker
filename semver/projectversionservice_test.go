@@ -1,21 +1,21 @@
-package yaml_test
+package semver_test
 
 import (
 	"github.com/Scardiecat/svermaker"
 	mock "github.com/Scardiecat/svermaker/mock"
 
-	yaml "github.com/Scardiecat/svermaker/yaml"
+	"github.com/Scardiecat/svermaker/semver"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Projectversionservice", func() {
 	var serializer = mock.Serializer{}
-	var pvs = yaml.ProjectVersionService{Serializer: &serializer}
+	var pvs = semver.ProjectVersionService{Serializer: &serializer}
 
 	BeforeEach(func() {
 		serializer = mock.Serializer{}
-		pvs = yaml.ProjectVersionService{Serializer: &serializer}
+		pvs = semver.ProjectVersionService{Serializer: &serializer}
 	})
 	Describe("Init()", func() {
 		Context("If a ProjectVersion does not exist", func() {
@@ -66,6 +66,35 @@ var _ = Describe("Projectversionservice", func() {
 				Expect(serializer.SerializerInvoked).To(BeFalse())
 				Expect(serializer.DeserializerInvoked).To(BeTrue())
 				Expect(p).To(Equal(saved))
+			})
+		})
+	})
+	Describe("GetCurrent()", func() {
+		Context("If a ProjectVersion does not exist", func() {
+			It("it should raise an error", func() {
+				serializer.ExistsFn = func() bool {
+					return false
+				}
+				_, err := pvs.GetCurrent()
+
+				Expect(err).To(MatchError("version not found"))
+			})
+		})
+		Context("If a ProjectVersion does  exist", func() {
+			It("it should return the current version", func() {
+				current := svermaker.Version{1, 1, 1, nil, nil}
+				saved := &svermaker.ProjectVersion{Current: current, Next: svermaker.Version{1, 1, 2, nil, nil}}
+
+				serializer.ExistsFn = func() bool {
+					return true
+				}
+				serializer.DeserializeFn = func() (*svermaker.ProjectVersion, error) {
+					return saved, nil
+				}
+				c, err := pvs.GetCurrent()
+
+				Expect(err).To(BeNil())
+				Expect(c).To(Equal(&current))
 			})
 		})
 	})
