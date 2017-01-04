@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/Scardiecat/svermaker"
 	"github.com/Scardiecat/svermaker/semver"
 	"github.com/Scardiecat/svermaker/yaml"
 	log "github.com/Sirupsen/logrus"
@@ -49,7 +49,26 @@ func main() {
 					Name:  "major",
 					Usage: "next is a major release (breaking api)",
 					Action: func(c *cli.Context) error {
-						log.Info("new major release: ", c.Args().First())
+						var serializer = yaml.NewSerializer("")
+						var m = semver.Manipulator{}
+						var pre []svermaker.PRVersion
+						if c.Args().Present() {
+							first, _ := m.MakePrerelease(c.Args().First())
+							pre = append(pre, first...)
+
+							tail, _ := m.MakePrerelease(c.Args().Tail()...)
+
+							pre = append(pre, tail...)
+						}
+
+						var pvs = semver.ProjectVersionService{Serializer: serializer}
+						if v, err := pvs.Bump(svermaker.MAJOR, pre); err == nil {
+							log.Infof("Current version is %s", v.Current.String())
+							log.Infof("Next version is %s", v.Next.String())
+							return nil
+						} else {
+							return err
+						}
 						return nil
 					},
 				},
@@ -57,7 +76,26 @@ func main() {
 					Name:  "minor",
 					Usage: "next is a minor release (non api break adding feature)",
 					Action: func(c *cli.Context) error {
-						fmt.Println("new task template: ", c.Args().First())
+						var serializer = yaml.NewSerializer("")
+						var m = semver.Manipulator{}
+						var pre []svermaker.PRVersion
+						if c.Args().Present() {
+							first, _ := m.MakePrerelease(c.Args().First())
+							pre = append(pre, first...)
+
+							tail, _ := m.MakePrerelease(c.Args().Tail()...)
+
+							pre = append(pre, tail...)
+						}
+
+						var pvs = semver.ProjectVersionService{Serializer: serializer}
+						if v, err := pvs.Bump(svermaker.MINOR, pre); err == nil {
+							log.Infof("Current version is %s", v.Current.String())
+							log.Infof("Next version is %s", v.Next.String())
+							return nil
+						} else {
+							return err
+						}
 						return nil
 					},
 				},
@@ -65,7 +103,26 @@ func main() {
 					Name:  "patch",
 					Usage: "next is a patch release (non api break bug fix)",
 					Action: func(c *cli.Context) error {
-						fmt.Println("new task template: ", c.Args().First())
+						var serializer = yaml.NewSerializer("")
+						var m = semver.Manipulator{}
+						var pre []svermaker.PRVersion
+						if c.Args().Present() {
+							first, _ := m.MakePrerelease(c.Args().First())
+							pre = append(pre, first...)
+
+							tail, _ := m.MakePrerelease(c.Args().Tail()...)
+
+							pre = append(pre, tail...)
+						}
+
+						var pvs = semver.ProjectVersionService{Serializer: serializer}
+						if v, err := pvs.Bump(svermaker.PATCH, pre); err == nil {
+							log.Infof("Current version is %s", v.Current.String())
+							log.Infof("Next version is %s", v.Next.String())
+							return nil
+						} else {
+							return err
+						}
 						return nil
 					},
 				},
