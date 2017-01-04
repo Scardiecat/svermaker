@@ -81,6 +81,7 @@ type Serializer interface {
 
 type ProjectVersionService interface {
 	Init() (*ProjectVersion, error)
+	GetCurrent() (*Version, error)
 }
 
 type Manipulator interface {
