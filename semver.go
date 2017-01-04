@@ -82,6 +82,7 @@ type Serializer interface {
 type ProjectVersionService interface {
 	Init() (*ProjectVersion, error)
 	GetCurrent() (*Version, error)
+	Bump(component SemverComponent, prerelease []PRVersion) (*ProjectVersion, error)
 }
 
 type Manipulator interface {

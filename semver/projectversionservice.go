@@ -35,3 +35,37 @@ func (p *ProjectVersionService) GetCurrent() (*svermaker.Version, error) {
 	}
 	return nil, errors.New("version not found")
 }
+
+func (p *ProjectVersionService) Bump(component svermaker.SemverComponent, prerelease []svermaker.PRVersion) (*svermaker.ProjectVersion, error) {
+	m := Manipulator{}
+	if !p.Serializer.Exists() {
+		return nil, errors.New("version not found")
+	}
+	v, err := p.Serializer.Deserialize()
+	if err != nil {
+		return nil, err
+	}
+	b, err := m.Bump(v.Next, component)
+	if err != nil {
+		return nil, err
+	}
+	v.Next = b
+	v.Current = v.Next
+	if prerelease == nil {
+		switch component {
+		case svermaker.PATCH:
+			prerelease, _ = m.MakePrerelease("rc")
+		case svermaker.MINOR:
+			prerelease, _ = m.MakePrerelease("beta")
+		case svermaker.MAJOR:
+			prerelease, _ = m.MakePrerelease("alpha")
+		}
+	}
+	v.Current.Pre = prerelease
+	// write it out
+	err = p.Serializer.Serialize(*v)
+	if err != nil {
+		return nil, err
+	}
+	return v, nil
+}

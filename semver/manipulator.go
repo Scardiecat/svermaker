@@ -18,8 +18,11 @@ func (m *Manipulator) Bump(semver svermaker.Version, component svermaker.SemverC
 		semver.Patch += 1
 	case svermaker.MINOR:
 		semver.Minor += 1
+		semver.Patch = 0
 	case svermaker.MAJOR:
 		semver.Major += 1
+		semver.Minor = 0
+		semver.Patch = 0
 	}
 	return semver, nil
 }
