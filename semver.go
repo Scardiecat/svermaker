@@ -82,7 +82,9 @@ type Serializer interface {
 type ProjectVersionService interface {
 	Init() (*ProjectVersion, error)
 	GetCurrent() (*Version, error)
+	Get() (*ProjectVersion, error)
 	Bump(component SemverComponent, prerelease []PRVersion) (*ProjectVersion, error)
+	Release() (*ProjectVersion, error)
 }
 
 type Manipulator interface {
@@ -91,4 +93,9 @@ type Manipulator interface {
 	SetMetadata(semver Version, metadata []string) (Version, error)
 	MakePrerelease(s ...string) ([]PRVersion, error)
 	Create(s string) (*Version, error)
+	Compare(v1 Version, v2 Version) int
+}
+
+type BuildHelper interface {
+	MakeTags(p ProjectVersion, buildMetadata []string) error
 }

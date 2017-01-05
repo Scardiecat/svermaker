@@ -143,6 +143,44 @@ func main() {
 				}
 			},
 		},
+		{
+			Name:    "generate",
+			Aliases: []string{"g"},
+			Usage:   "generate build helper",
+			Action: func(c *cli.Context) error {
+				var serializer = yaml.NewSerializer("")
+				var pvs = semver.ProjectVersionService{Serializer: serializer}
+				var bh = semver.BuildHelper{}
+				var meta []string
+				if c.Args().Present() {
+					meta = append(meta, c.Args().First())
+				}
+				if v, err := pvs.Get(); err == nil {
+					err = bh.MakeTags(*v, meta)
+					if err != nil {
+						return err
+					}
+					return nil
+				} else {
+					return err
+				}
+			},
+		},
+		{
+			Name:    "release",
+			Aliases: []string{"r"},
+			Usage:   "make a release",
+			Action: func(c *cli.Context) error {
+				var serializer = yaml.NewSerializer(c.Args().First())
+				var pvs = semver.ProjectVersionService{Serializer: serializer}
+				if v, err := pvs.Release(); err == nil {
+					log.Infof("Release is %s", v.Current.String())
+					return nil
+				} else {
+					return err
+				}
+			},
+		},
 	}
 
 	app.Run(os.Args)

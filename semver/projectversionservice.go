@@ -35,7 +35,16 @@ func (p *ProjectVersionService) GetCurrent() (*svermaker.Version, error) {
 	}
 	return nil, errors.New("version not found")
 }
-
+func (p *ProjectVersionService) Get() (*svermaker.ProjectVersion, error) {
+	if p.Serializer.Exists() {
+		v, err := p.Serializer.Deserialize()
+		if err != nil {
+			return nil, err
+		}
+		return v, nil
+	}
+	return nil, errors.New("version not found")
+}
 func (p *ProjectVersionService) Bump(component svermaker.SemverComponent, prerelease []svermaker.PRVersion) (*svermaker.ProjectVersion, error) {
 	m := Manipulator{}
 	if !p.Serializer.Exists() {
@@ -62,6 +71,23 @@ func (p *ProjectVersionService) Bump(component svermaker.SemverComponent, prerel
 		}
 	}
 	v.Current.Pre = prerelease
+	// write it out
+	err = p.Serializer.Serialize(*v)
+	if err != nil {
+		return nil, err
+	}
+	return v, nil
+}
+
+func (p *ProjectVersionService) Release() (*svermaker.ProjectVersion, error) {
+	if !p.Serializer.Exists() {
+		return nil, errors.New("version not found")
+	}
+	v, err := p.Serializer.Deserialize()
+	if err != nil {
+		return nil, err
+	}
+	v.Current = v.Next
 	// write it out
 	err = p.Serializer.Serialize(*v)
 	if err != nil {

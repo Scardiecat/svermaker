@@ -86,3 +86,10 @@ func exportTo(v svermaker.Version) *blangs.Version {
 	}
 	return &blangs.Version{v.Major, v.Minor, v.Patch, bpre, bbuild}
 }
+
+func (m *Manipulator) Compare(v1 svermaker.Version, v2 svermaker.Version) int {
+	b1 := exportTo(v1)
+	b2 := exportTo(v2)
+
+	return b1.Compare(*b2)
+}

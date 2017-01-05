@@ -69,6 +69,35 @@ var _ = Describe("Projectversionservice", func() {
 			})
 		})
 	})
+	Describe("Get()", func() {
+		Context("If a ProjectVersion does not exist", func() {
+			It("it should raise an error", func() {
+				serializer.ExistsFn = func() bool {
+					return false
+				}
+				_, err := pvs.Get()
+
+				Expect(err).To(MatchError("version not found"))
+			})
+		})
+		Context("If a ProjectVersion does  exist", func() {
+			It("it should return it", func() {
+				current := svermaker.Version{1, 1, 1, nil, nil}
+				saved := &svermaker.ProjectVersion{Current: current, Next: current}
+
+				serializer.ExistsFn = func() bool {
+					return true
+				}
+				serializer.DeserializeFn = func() (*svermaker.ProjectVersion, error) {
+					return saved, nil
+				}
+				c, err := pvs.Get()
+
+				Expect(err).To(BeNil())
+				Expect(c).To(Equal(saved))
+			})
+		})
+	})
 	Describe("GetCurrent()", func() {
 		Context("If a ProjectVersion does not exist", func() {
 			It("it should raise an error", func() {
@@ -341,6 +370,30 @@ var _ = Describe("Projectversionservice", func() {
 					Expect(p).To(Equal(expected))
 				})
 			})
+		})
+	})
+	Describe("Release()", func() {
+		It("should set the current version to the next version", func() {
+			current := svermaker.Version{1, 1, 1, nil, nil}
+			next := svermaker.Version{2, 0, 0, nil, nil}
+			expected := &svermaker.ProjectVersion{Current: next, Next: next}
+			saved := &svermaker.ProjectVersion{Current: current, Next: next}
+			serializer.ExistsFn = func() bool {
+				return true
+			}
+			serializer.DeserializeFn = func() (*svermaker.ProjectVersion, error) {
+				return saved, nil
+			}
+			serializer.SerializerFn = func(p svermaker.ProjectVersion) error {
+				return nil
+			}
+
+			p, err := pvs.Release()
+			Expect(err).To(BeNil())
+			Expect(serializer.ExistsInvoked).To(BeTrue())
+			Expect(serializer.SerializerInvoked).To(BeTrue())
+			Expect(serializer.DeserializerInvoked).To(BeTrue())
+			Expect(p).To(Equal(expected))
 		})
 	})
 })
