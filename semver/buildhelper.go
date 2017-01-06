@@ -48,13 +48,16 @@ func (b *BuildHelper) MakeTags(p svermaker.ProjectVersion, buildMetadata []strin
 			log.Warningln("Add a buildcounter environment variable to have it added to the prereleaseversion")
 		}
 	}
+
+	hc, _ := m.SetMetadata(c, nil)
+
 	f, err := os.Create("./buildhelper.tmp")
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
-	_, err = f.WriteString(fmt.Sprintf("export svermakerBuildVersion=%s\nexport svermakerRelease=%t", c.String(), isRelease))
+	_, err = f.WriteString(fmt.Sprintf("export svermakerBuildVersion=%s\nexport svermakerRelease=%t\nexport svermakerHelmLabel=%s", c.String(), isRelease, hc.String()))
 	if err != nil {
 		return err
 	}

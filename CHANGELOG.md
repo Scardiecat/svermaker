@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 ### Changed
-
+## [0.2.1] 2017-01-6
+### Added
+Buildhelper: export a variable with s stripped metadata so it can be used as a kubernetes label (Kubernetes does not accept complete semvars)
 ## [0.2.0] 2017-01-5
 ### Added
 - manipulator: allows to bump versions and set prerelease and build metadata
