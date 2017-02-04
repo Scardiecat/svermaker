@@ -32,12 +32,12 @@ func main() {
 			Action: func(c *cli.Context) error {
 				var serializer = yaml.NewSerializer(c.Args().First())
 				var pvs = semver.ProjectVersionService{Serializer: serializer}
-				if v, err := pvs.GetCurrent(); err == nil {
-					log.Infof("Version is %s", v.String())
-					return nil
-				} else {
+				v, err := pvs.GetCurrent()
+				if err != nil {
 					return err
 				}
+				log.Infof("Version is %s", v.String())
+				return nil
 			},
 		},
 		{
@@ -62,14 +62,15 @@ func main() {
 						}
 
 						var pvs = semver.ProjectVersionService{Serializer: serializer}
-						if v, err := pvs.Bump(svermaker.MAJOR, pre); err == nil {
-							log.Infof("Current version is %s", v.Current.String())
-							log.Infof("Next version is %s", v.Next.String())
-							return nil
-						} else {
+						v, err := pvs.Bump(svermaker.MAJOR, pre)
+						if err != nil {
 							return err
 						}
+
+						log.Infof("Current version is %s", v.Current.String())
+						log.Infof("Next version is %s", v.Next.String())
 						return nil
+
 					},
 				},
 				{
@@ -89,13 +90,12 @@ func main() {
 						}
 
 						var pvs = semver.ProjectVersionService{Serializer: serializer}
-						if v, err := pvs.Bump(svermaker.MINOR, pre); err == nil {
-							log.Infof("Current version is %s", v.Current.String())
-							log.Infof("Next version is %s", v.Next.String())
-							return nil
-						} else {
+						v, err := pvs.Bump(svermaker.MINOR, pre)
+						if err != nil {
 							return err
 						}
+						log.Infof("Current version is %s", v.Current.String())
+						log.Infof("Next version is %s", v.Next.String())
 						return nil
 					},
 				},
@@ -116,13 +116,12 @@ func main() {
 						}
 
 						var pvs = semver.ProjectVersionService{Serializer: serializer}
-						if v, err := pvs.Bump(svermaker.PATCH, pre); err == nil {
-							log.Infof("Current version is %s", v.Current.String())
-							log.Infof("Next version is %s", v.Next.String())
-							return nil
-						} else {
+						v, err := pvs.Bump(svermaker.PATCH, pre)
+						if err != nil {
 							return err
 						}
+						log.Infof("Current version is %s", v.Current.String())
+						log.Infof("Next version is %s", v.Next.String())
 						return nil
 					},
 				},
@@ -135,12 +134,12 @@ func main() {
 			Action: func(c *cli.Context) error {
 				var serializer = yaml.NewSerializer(c.Args().First())
 				var pvs = semver.ProjectVersionService{Serializer: serializer}
-				if v, err := pvs.Init(); err == nil {
-					log.Infof("Version is %s", v.Current.String())
-					return nil
-				} else {
+				v, err := pvs.Init()
+				if err != nil {
 					return err
 				}
+				log.Infof("Version is %s", v.Current.String())
+				return nil
 			},
 		},
 		{
@@ -155,15 +154,15 @@ func main() {
 				if c.Args().Present() {
 					meta = append(meta, c.Args().First())
 				}
-				if v, err := pvs.Get(); err == nil {
-					err = bh.MakeTags(*v, meta)
-					if err != nil {
-						return err
-					}
-					return nil
-				} else {
+				v, err := pvs.Get()
+				if err != nil {
 					return err
 				}
+				err = bh.MakeTags(*v, meta)
+				if err != nil {
+					return err
+				}
+				return nil
 			},
 		},
 		{
@@ -173,12 +172,12 @@ func main() {
 			Action: func(c *cli.Context) error {
 				var serializer = yaml.NewSerializer(c.Args().First())
 				var pvs = semver.ProjectVersionService{Serializer: serializer}
-				if v, err := pvs.Release(); err == nil {
-					log.Infof("Release is %s", v.Current.String())
-					return nil
-				} else {
+				v, err := pvs.Release()
+				if err != nil {
 					return err
 				}
+				log.Infof("Release is %s", v.Current.String())
+				return nil
 			},
 		},
 	}

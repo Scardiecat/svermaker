@@ -10,6 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Serializer implements the Serializer interface
 type Serializer struct {
 	// path to version.txt
 	Path     string
@@ -24,6 +25,7 @@ type projectVersion struct {
 	Next    string
 }
 
+// NewSerializer creates a Serializer
 func NewSerializer(path string) *Serializer {
 	if path == "" {
 		path = "."
@@ -33,6 +35,7 @@ func NewSerializer(path string) *Serializer {
 	return s
 }
 
+// Exists checks if the file exists
 func (s *Serializer) Exists() bool {
 	if _, err := os.Stat(path.Join(s.Path, s.Filename)); os.IsNotExist(err) {
 		return false
@@ -40,6 +43,7 @@ func (s *Serializer) Exists() bool {
 	return true
 }
 
+// Serialize writes the ProjectVersion to a yml
 func (s *Serializer) Serialize(p svermaker.ProjectVersion) error {
 	v := projectVersion{Current: p.Current.String(), Next: p.Next.String()}
 	b, err := yaml.Marshal(&v)
@@ -54,6 +58,7 @@ func (s *Serializer) Serialize(p svermaker.ProjectVersion) error {
 	return nil
 }
 
+// Deserialize reads a projectcersion from a yml
 func (s *Serializer) Deserialize() (*svermaker.ProjectVersion, error) {
 	v := projectVersion{}
 	m := semver.Manipulator{}

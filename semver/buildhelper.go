@@ -13,10 +13,11 @@ import (
 // Ensure BuildHelper implements svermaker.BuildHelper.
 var _ svermaker.BuildHelper = &BuildHelper{}
 
-// BuildHelper
+// BuildHelper implements the svermaker.BuildHelper
 type BuildHelper struct {
 }
 
+// MakeTags writes a helper file with build values
 func (b *BuildHelper) MakeTags(p svermaker.ProjectVersion, buildMetadata []string) error {
 	m := Manipulator{}
 
