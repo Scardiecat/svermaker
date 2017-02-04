@@ -8,7 +8,7 @@ type Version struct {
 	Minor uint64
 	Patch uint64
 	Pre   []PRVersion
-	Build []string //No Precendence
+	Build []string //No Precedence
 }
 
 // Version to string
@@ -58,27 +58,33 @@ type PRVersion struct {
 	IsNum      bool
 }
 
+// SemverComponent is the base of the enum
 type SemverComponent int8
 
+//Semvar component enum
 const (
 	PATCH SemverComponent = iota
 	MINOR
 	MAJOR
 )
 
+// ProjectVersion holds the current and next version identifier
 type ProjectVersion struct {
 	Current Version
 	Next    Version
 }
 
+// DefaultProjectVersion is the init value for a new repo
 var DefaultProjectVersion = ProjectVersion{Current: Version{0, 1, 0, nil, nil}, Next: Version{0, 1, 0, nil, nil}}
 
+// Serializer is an interface to write and read ProjectVersions
 type Serializer interface {
 	Serialize(p ProjectVersion) error
 	Deserialize() (*ProjectVersion, error)
 	Exists() bool
 }
 
+//ProjectVersionService is the api for the service
 type ProjectVersionService interface {
 	Init() (*ProjectVersion, error)
 	GetCurrent() (*Version, error)
@@ -87,6 +93,7 @@ type ProjectVersionService interface {
 	Release() (*ProjectVersion, error)
 }
 
+//Manipulator is the api to change versions
 type Manipulator interface {
 	Bump(semver Version, component SemverComponent) (Version, error)
 	SetPrerelease(semver Version, prerelease []PRVersion) (Version, error)
@@ -96,6 +103,7 @@ type Manipulator interface {
 	Compare(v1 Version, v2 Version) int
 }
 
+//BuildHelper is the api to write a helper file for build tools
 type BuildHelper interface {
 	MakeTags(p ProjectVersion, buildMetadata []string) error
 }

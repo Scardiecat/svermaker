@@ -12,28 +12,35 @@ var _ svermaker.Manipulator = &Manipulator{}
 type Manipulator struct {
 }
 
+// Bump will increase a version
 func (m *Manipulator) Bump(semver svermaker.Version, component svermaker.SemverComponent) (svermaker.Version, error) {
 	switch component {
 	case svermaker.PATCH:
-		semver.Patch += 1
+		semver.Patch++
 	case svermaker.MINOR:
-		semver.Minor += 1
+		semver.Minor++
 		semver.Patch = 0
 	case svermaker.MAJOR:
-		semver.Major += 1
+		semver.Major++
 		semver.Minor = 0
 		semver.Patch = 0
 	}
 	return semver, nil
 }
+
+// SetPrerelease sets a prerelease version
 func (m *Manipulator) SetPrerelease(semver svermaker.Version, prerelease []svermaker.PRVersion) (svermaker.Version, error) {
 	semver.Pre = prerelease
 	return semver, nil
 }
+
+// SetMetadata sets build metadata
 func (m *Manipulator) SetMetadata(semver svermaker.Version, metadata []string) (svermaker.Version, error) {
 	semver.Build = metadata
 	return semver, nil
 }
+
+// MakePrerelease makes a prerelease
 func (m *Manipulator) MakePrerelease(s ...string) ([]svermaker.PRVersion, error) {
 	bpres := make([]blangs.PRVersion, 0)
 	for _, p := range s {
@@ -45,13 +52,15 @@ func (m *Manipulator) MakePrerelease(s ...string) ([]svermaker.PRVersion, error)
 	return setPreFrom(bpres), nil
 }
 
+// Create a version
 func (m *Manipulator) Create(s string) (*svermaker.Version, error) {
-	if bv, err := blangs.Make(s); err == nil {
-		return setFrom(bv), nil
-	} else {
+	bv, err := blangs.Make(s)
+	if err != nil {
 		return nil, err
 	}
+	return setFrom(bv), nil
 }
+
 func setPreFrom(bv []blangs.PRVersion) []svermaker.PRVersion {
 	pre := make([]svermaker.PRVersion, 0)
 	for _, bpre := range bv {
@@ -87,6 +96,7 @@ func exportTo(v svermaker.Version) *blangs.Version {
 	return &blangs.Version{v.Major, v.Minor, v.Patch, bpre, bbuild}
 }
 
+// Compare compares 2 versions
 func (m *Manipulator) Compare(v1 svermaker.Version, v2 svermaker.Version) int {
 	b1 := exportTo(v1)
 	b2 := exportTo(v2)

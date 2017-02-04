@@ -33,7 +33,7 @@ var _ = Describe("Testing with Ginkgo", func() {
 			pre, _ := m.MakePrerelease(test.p...)
 			res1, err := m.SetMetadata(test.v, test.m)
 			if err != nil {
-				GinkgoT().Errorf("error occured %#v", err)
+				GinkgoT().Errorf("error occurred %#v", err)
 			}
 			if res, err := m.SetPrerelease(res1, pre); !reflect.DeepEqual(res, test.result) || err != nil {
 				GinkgoT().Errorf("result %#v does not equal expected %#v", res, test.result)
