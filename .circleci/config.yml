@@ -8,7 +8,6 @@ jobs:
     - GOCACHE: "/tmp/go/cache"
     - DEP_VERSION: 0.4.1
     steps:
-    - run: git config --global url.ssh://git@github.com/Scardiecat.insteadOf https://github.com/Scardiecat
     - checkout
     - restore_cache:
         key: gopkg-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
