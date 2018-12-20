@@ -25,6 +25,7 @@ jobs:
         - build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_PREVIOUS_BUILD_NUM }}
         paths:
         - /tmp/go/cache
+    - run: go get -v -t -d ./...
     - run:
         name: test
         command: |
