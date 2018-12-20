@@ -7,7 +7,7 @@ import (
 
 	"github.com/Scardiecat/svermaker"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Ensure BuildHelper implements svermaker.BuildHelper.
