@@ -33,3 +33,6 @@ _testmain.go
 vendor/
 CHANGELOG.html
 README.html
+\.idea/
+
+*.iml
