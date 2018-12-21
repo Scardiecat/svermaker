@@ -58,7 +58,7 @@ func (b *BuildHelper) MakeTags(p svermaker.ProjectVersion, buildMetadata []strin
 	}
 	defer f.Close()
 
-	_, err = f.WriteString(fmt.Sprintf("export svermakerBuildVersion=%s\nexport svermakerRelease=%t\nexport svermakerHelmLabel=%s", c.String(), isRelease, hc.String()))
+	_, err = f.WriteString(fmt.Sprintf("export svermakerBuildVersion=%s\nexport goModuleBuildVersion=v%s\nexport svermakerRelease=%t\nexport svermakerHelmLabel=%s", c.String(), c.String(), isRelease, hc.String()))
 	if err != nil {
 		return err
 	}
