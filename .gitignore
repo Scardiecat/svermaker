@@ -36,3 +36,5 @@ README.html
 \.idea/
 
 *.iml
+
+dist/
