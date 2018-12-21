@@ -6,7 +6,7 @@ import (
 	"github.com/Scardiecat/svermaker"
 	"github.com/Scardiecat/svermaker/semver"
 	"github.com/Scardiecat/svermaker/yaml"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
 

@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 ### Changed
+## [0.3.0] 2018-12-21
+### Added
+Export a version which can be used in go module setups. (includes the no standard v prefix)
+Use ```goModuleBuildVersion``` to tag go module repositories 
+### Changed
+## [0.2.2] 2018-12-20
+### Added
+Switch to use go modules
+### Changed
 ## [0.2.1] 2017-01-6
 ### Added
 Buildhelper: export a variable with s stripped metadata so it can be used as a kubernetes label (Kubernetes does not accept complete semvars)
