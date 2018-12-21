@@ -46,6 +46,7 @@ workflows:
   release:
     jobs:
       - release:
+          context: GITHUB_TOKEN
           filters:
             branches:
               ignore: /.*/
