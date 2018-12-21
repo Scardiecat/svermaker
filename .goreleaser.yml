@@ -11,6 +11,10 @@ builds:
     env:
     - CGO_ENABLED=0
     main: ./cmd/svermaker/main.go
+    goos:
+      - windows
+      - darwin
+      - linux
 
 archive:
   format: zip
