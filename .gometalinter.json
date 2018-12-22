@@ -1,0 +1,4 @@
+{
+    "DisableAll": true,
+    "Enable": ["deadcode","dupl","errcheck","goconst","gocyclo","goconst","goimports","golint","gosimple","vet", "vetshadow"]
+}
