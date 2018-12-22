@@ -71,9 +71,9 @@ func (p *ProjectVersionService) Bump(component svermaker.SemverComponent, prerel
 		case svermaker.PATCH:
 			prerelease, _ = m.MakePrerelease("rc")
 		case svermaker.MINOR:
-			prerelease, _ = m.MakePrerelease("beta")
+			prerelease, _ = m.MakePrerelease("rc")
 		case svermaker.MAJOR:
-			prerelease, _ = m.MakePrerelease("alpha")
+			prerelease, _ = m.MakePrerelease("rc")
 		}
 	}
 	v.Current.Pre = prerelease

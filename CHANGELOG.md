@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 ### Changed
+## [0.3.1]
+### Added
+### Changed
+### Fixed
+All release candidates now use the -rc denotion in their semver
 ## [0.3.0] 2018-12-21
 ### Added
 Export a version which can be used in go module setups. (includes the no standard v prefix)
