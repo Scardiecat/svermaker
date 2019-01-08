@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 ### Changed
+## [0.4.0]
+### Added
+### Changed
+Allow nun numeric buildcounters. They will be added as strings to the prerelease versions. 
+This allows git short hashes in docker labels
+### Fixed
+All release candidates now use the -rc denotion in their semver
 ## [0.3.1]
 ### Added
 ### Changed

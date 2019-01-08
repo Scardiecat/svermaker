@@ -35,7 +35,10 @@ func (b *BuildHelper) MakeTags(p svermaker.ProjectVersion, buildMetadata []strin
 	if !isRelease && bc != "" {
 		i, err := strconv.ParseUint(bc, 10, 64)
 		if err != nil {
-			log.Errorf("buildcounter is not not a number its: %s", bc)
+			log.Infof("buildcounter is not not a number its: %s adding it as string", bc)
+			pre := c.Pre
+			pre = append(pre, svermaker.PRVersion{bc, i, false})
+			c.Pre = pre
 		} else {
 			pre := c.Pre
 			if len(pre) >= 1 && pre[len(pre)-1].IsNum {
