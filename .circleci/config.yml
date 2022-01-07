@@ -22,7 +22,7 @@ jobs:
           name: Install Dependencies
           command: |
             go mod download
-            go install github.com/onsi/ginkgo/v2/ginkgo@2.0.0
+            go install github.com/onsi/ginkgo/v2/ginkgo@v2.0.0
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
@@ -44,4 +44,10 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - release
+      - release:
+          context: GITHUB_TOKEN
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*(-.*)*/
