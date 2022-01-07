@@ -7,31 +7,30 @@ before:
     # you may remove this if you don't need go generate
     - go generate ./...
 builds:
-  -
-    env:
-    - CGO_ENABLED=0
+  - env:
+      - CGO_ENABLED=0
     main: ./cmd/svermaker/main.go
     goos:
       - windows
       - darwin
       - linux
-
-archive:
-  format: zip
-
-  name_template: "{{.Binary}}_{{.Os}}-{{.Arch}}"
-  replacements:
-    darwin: darwin
-    linux: linux
-    windows: windows
-    amd64: amd64
+gomod:
+  proxy: true
+archives:
+  - format: zip
+    name_template: "{{.Binary}}_{{.Os}}-{{.Arch}}"
+    replacements:
+      darwin: darwin
+      linux: linux
+      windows: windows
+      amd64: amd64
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - "^docs:"
+      - "^test:"
