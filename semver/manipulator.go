@@ -2,7 +2,7 @@ package semver
 
 import (
 	"github.com/Scardiecat/svermaker"
-	blangs "github.com/blang/semver"
+	blangs "github.com/blang/semver/v4"
 )
 
 // Ensure Manipulator implements svermaker.Manipulator.

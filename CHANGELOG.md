@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 ### Changed
+## [0.4.1]
+### Added
+### Changed
+* library updates
+* switching to ginkgo v2
 ## [0.4.0]
 ### Added
 ### Changed

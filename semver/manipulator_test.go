@@ -4,7 +4,7 @@ import (
 	"reflect"
 
 	"github.com/Scardiecat/svermaker"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 )
 
 var _ = Describe("Testing with Ginkgo", func() {
