@@ -5,7 +5,7 @@ import (
 	mock "github.com/Scardiecat/svermaker/mock"
 
 	"github.com/Scardiecat/svermaker/semver"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
@@ -266,7 +266,7 @@ var _ = Describe("Projectversionservice", func() {
 				})
 			})
 			Context("When a prerelease version is not set", func() {
-				It("should set the prerelease to beta for current version", func() {
+				It("should set the prerelease to rc for current version", func() {
 					current := svermaker.Version{1, 1, 1, nil, nil}
 					next := svermaker.Version{1, 2, 0, nil, nil}
 					expected := &svermaker.ProjectVersion{Current: current, Next: next}
@@ -283,7 +283,7 @@ var _ = Describe("Projectversionservice", func() {
 
 					p, err := pvs.Bump(svermaker.MINOR, nil)
 					m := semver.Manipulator{}
-					pre, _ := m.MakePrerelease("beta")
+					pre, _ := m.MakePrerelease("rc")
 					Expect(err).To(BeNil())
 					Expect(serializer.ExistsInvoked).To(BeTrue())
 					Expect(serializer.SerializerInvoked).To(BeTrue())
@@ -344,7 +344,7 @@ var _ = Describe("Projectversionservice", func() {
 				})
 			})
 			Context("When a prerelease version is not set", func() {
-				It("should set the prerelease to alpha for current version", func() {
+				It("should set the prerelease to rc for current version", func() {
 					current := svermaker.Version{1, 1, 1, nil, nil}
 					next := svermaker.Version{2, 0, 0, nil, nil}
 					expected := &svermaker.ProjectVersion{Current: current, Next: next}
@@ -361,7 +361,7 @@ var _ = Describe("Projectversionservice", func() {
 
 					p, err := pvs.Bump(svermaker.MAJOR, nil)
 					m := semver.Manipulator{}
-					pre, _ := m.MakePrerelease("alpha")
+					pre, _ := m.MakePrerelease("rc")
 					Expect(err).To(BeNil())
 					Expect(serializer.ExistsInvoked).To(BeTrue())
 					Expect(serializer.SerializerInvoked).To(BeTrue())

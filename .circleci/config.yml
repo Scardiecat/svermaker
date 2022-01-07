@@ -2,42 +2,43 @@ version: 2
 jobs:
   build:
     docker:
-    - image: circleci/golang:1.11
+      - image: circleci/golang:1.18
     environment:
-    - GOCACHE: "/tmp/go/cache"
+      - GOCACHE: "/tmp/go/cache"
     steps:
-    - checkout
-    - restore_cache:
-        keys:
-        - go-mod-v1-{{ checksum "go.sum" }}
-    - run:
-        name: download-libraries
-        command: |
-          go get github.com/onsi/ginkgo/ginkgo
-          go get github.com/onsi/gomega/...
-    - save_cache:
-        key: go-mod-v1-{{ checksum "go.sum" }}
-        paths:
-          - "/go/pkg/mod"
-    - restore_cache:
-        keys:
-        - build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_PREVIOUS_BUILD_NUM }}
-        paths:
-        - /tmp/go/cache
-    - run: go get -v -t -d ./...
-    - run:
-        name: test
-        command: |
-          mkdir -p $GOCACHE
-          go build -v
-          go test -p 6 -race ./...
-    - save_cache:
-        key: build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_BUILD_NUM }}
-        paths:
-        - /tmp/go/cache
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v1-{{ checksum "go.sum" }}
+      - run:
+          name: download-libraries
+          command: |
+            go get github.com/onsi/ginkgo/v2
+            go install github.com/onsi/ginkgo/v2/ginkgo
+            go get github.com/onsi/gomega/...
+      - save_cache:
+          key: go-mod-v1-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+      - restore_cache:
+          keys:
+            - build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_PREVIOUS_BUILD_NUM }}
+          paths:
+            - /tmp/go/cache
+      - run: go get -v -t -d ./...
+      - run:
+          name: test
+          command: |
+            mkdir -p $GOCACHE
+            go build -v
+            go test -p 6 -race ./...
+      - save_cache:
+          key: build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_BUILD_NUM }}
+          paths:
+            - /tmp/go/cache
   release:
     docker:
-      - image: circleci/golang:1.11
+      - image: circleci/golang:1.18
     steps:
       - checkout
       - run: curl -sL https://git.io/goreleaser | bash
